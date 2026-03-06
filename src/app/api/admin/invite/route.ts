@@ -31,9 +31,8 @@ export async function POST(req: Request) {
         <!-- Header -->
         <tr>
           <td style="background:#7c3aed;padding:32px 40px;text-align:center">
-            <div style="font-size:40px;margin-bottom:8px">🐱</div>
-            <div style="color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.3px">PussyWatch</div>
-            <div style="color:#ddd6fe;font-size:13px;margin-top:4px">cat sitting, coordinated</div>
+            <img src="${appUrl}/logo.png" alt="PussyWatch" width="240" style="display:block;margin:0 auto;max-width:100%;height:auto" />
+            <div style="color:#ddd6fe;font-size:13px;margin-top:10px">cat sitting, coordinated</div>
           </td>
         </tr>
 
