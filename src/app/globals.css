@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-background: #fafaf9;
+  }
+
+  .dark {
+    --color-background: #0c0a09;
+  }
+
+  body {
+    background-color: var(--color-background);
+  }
+}
+
+/* Safe area support for notched phones */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
