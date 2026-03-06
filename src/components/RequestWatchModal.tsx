@@ -112,7 +112,7 @@ export default function RequestWatchModal({ households, currentUser, defaultHous
                 </select>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="text-sm font-medium text-stone-700 dark:text-stone-300 block mb-1.5">From</label>
                   <input

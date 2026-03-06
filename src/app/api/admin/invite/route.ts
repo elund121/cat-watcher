@@ -31,8 +31,8 @@ export async function POST(req: Request) {
         <!-- Header -->
         <tr>
           <td style="background:#7c3aed;padding:32px 40px;text-align:center">
-            <img src="${appUrl}/logo.png" alt="PussyWatch" width="240" style="display:block;margin:0 auto;max-width:100%;height:auto" />
-            <div style="color:#ddd6fe;font-size:13px;margin-top:10px">cat sitting, coordinated</div>
+            <img src="${appUrl}/logo.png" alt="PussyWatch" width="350" style="display:block;margin:0 auto;max-width:100%;height:auto" />
+            <div style="color:#ddd6fe;font-size:13px">cat sitting, coordinated</div>
           </td>
         </tr>
 
