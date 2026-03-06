@@ -81,7 +81,7 @@ export default function ProfilePage() {
             style={{ backgroundColor: avatarFilename ? undefined : color }}
           >
             {avatarFilename ? (
-              <img src={`/uploads/${avatarFilename}`} alt="Avatar" className="w-full h-full object-cover" />
+              <img src={`/api/uploads/${avatarFilename}`} alt="Avatar" className="w-full h-full object-cover" />
             ) : (
               name?.[0]?.toUpperCase() ?? "?"
             )}

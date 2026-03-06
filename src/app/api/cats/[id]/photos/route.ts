@@ -41,7 +41,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
   const filename = `${uuidv4()}.${ext}`;
 
-  const uploadsDir = path.join(process.cwd(), "public", "uploads");
+  const uploadsDir = path.join(process.cwd(), "data", "uploads");
   if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
   fs.writeFileSync(path.join(uploadsDir, filename), Buffer.from(await file.arrayBuffer()));
 
@@ -67,7 +67,7 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
   const photo = db.prepare("SELECT filename FROM cat_photos WHERE id = ? AND cat_id = ?").get(photo_id, params.id) as { filename: string } | undefined;
   if (!photo) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const filePath = path.join(process.cwd(), "public", "uploads", photo.filename);
+  const filePath = path.join(process.cwd(), "data", "uploads", photo.filename);
   if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
 
   db.prepare("DELETE FROM cat_photos WHERE id = ?").run(photo_id);

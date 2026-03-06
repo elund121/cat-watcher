@@ -224,7 +224,7 @@ export default function CatProfileModal({ cat, canEdit, onClose, onUpdated }: Pr
             )}
             <img
               key={photos[lightboxIndex].id}
-              src={`/uploads/${photos[lightboxIndex].filename}`}
+              src={`/api/uploads/${photos[lightboxIndex].filename}`}
               alt=""
               className="max-w-full max-h-full object-contain rounded-xl select-none"
               draggable={false}
@@ -252,7 +252,7 @@ export default function CatProfileModal({ cat, canEdit, onClose, onUpdated }: Pr
                     i === lightboxIndex ? "border-white scale-110" : "border-white/30 opacity-60"
                   }`}
                 >
-                  <img src={`/uploads/${p.filename}`} alt="" className="w-full h-full object-cover" />
+                  <img src={`/api/uploads/${p.filename}`} alt="" className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
@@ -382,7 +382,7 @@ export default function CatProfileModal({ cat, canEdit, onClose, onUpdated }: Pr
                             onClick={() => setLightboxIndex(i)}
                           >
                             <img
-                              src={`/uploads/${p.filename}`}
+                              src={`/api/uploads/${p.filename}`}
                               alt=""
                               className={`w-full h-full object-cover rounded-2xl border-2 transition-colors ${isCover ? "border-amber-400" : "border-transparent"}`}
                             />

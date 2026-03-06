@@ -19,14 +19,14 @@ export async function POST(request: Request) {
   // Delete old avatar file if it exists
   const existing = db.prepare("SELECT avatar FROM users WHERE id = ?").get(session.user.id) as { avatar: string | null } | undefined;
   if (existing?.avatar) {
-    const oldPath = path.join(process.cwd(), "public", "uploads", existing.avatar);
+    const oldPath = path.join(process.cwd(), "data", "uploads", existing.avatar);
     if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
   }
 
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
   const filename = `avatar-${uuidv4()}.${ext}`;
 
-  const uploadsDir = path.join(process.cwd(), "public", "uploads");
+  const uploadsDir = path.join(process.cwd(), "data", "uploads");
   if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
   fs.writeFileSync(path.join(uploadsDir, filename), Buffer.from(await file.arrayBuffer()));
 

@@ -14,7 +14,7 @@ export default function UserAvatar({ name, color, avatar, className = "w-8 h-8 t
       style={{ backgroundColor: avatar ? undefined : (color ?? "#7c3aed") }}
     >
       {avatar ? (
-        <img src={`/uploads/${avatar}`} alt={name} className="w-full h-full object-cover" />
+        <img src={`/api/uploads/${avatar}`} alt={name} className="w-full h-full object-cover" />
       ) : (
         name[0]?.toUpperCase() ?? "?"
       )}

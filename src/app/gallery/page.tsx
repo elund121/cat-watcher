@@ -61,7 +61,7 @@ function GalleryContent() {
             >
               {cat.cover_photo ? (
                 <img
-                  src={`/uploads/${cat.cover_photo}`}
+                  src={`/api/uploads/${cat.cover_photo}`}
                   alt={cat.name}
                   className="w-full aspect-square object-cover"
                 />

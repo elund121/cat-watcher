@@ -78,8 +78,8 @@ function createDb(): Database.Database {
   }
   if (!userColumns.some(c => c.name === "is_superuser")) {
     try { db.exec("ALTER TABLE users ADD COLUMN is_superuser INTEGER NOT NULL DEFAULT 0"); } catch { /* already exists */ }
-    db.exec("UPDATE users SET is_superuser = 1 WHERE email = 'elund121@gmail.com'");
   }
+  db.prepare("UPDATE users SET is_superuser = 1 WHERE email = ?").run("elund121@gmail.com");
   if (!userColumns.some(c => c.name === "avatar")) {
     try { db.exec("ALTER TABLE users ADD COLUMN avatar TEXT"); } catch { /* already exists */ }
   }

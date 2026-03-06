@@ -281,9 +281,9 @@ export default function WatchCard({ watch, currentUser, isSuperuser, onClaim, on
           {photos.length > 0 && (
             <div className="flex gap-2 overflow-x-auto pb-2 mb-1">
               {photos.map(p => (
-                <a key={p.id} href={`/uploads/${p.filename}`} target="_blank" rel="noopener noreferrer">
+                <a key={p.id} href={`/api/uploads/${p.filename}`} target="_blank" rel="noopener noreferrer">
                   <img
-                    src={`/uploads/${p.filename}`}
+                    src={`/api/uploads/${p.filename}`}
                     alt="Sit photo"
                     className="h-24 w-24 object-cover rounded-xl flex-shrink-0 border border-stone-100 dark:border-stone-800"
                   />

@@ -34,7 +34,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
   const filename = `${uuidv4()}.${ext}`;
 
-  const uploadsDir = path.join(process.cwd(), "public", "uploads");
+  const uploadsDir = path.join(process.cwd(), "data", "uploads");
   if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
   fs.writeFileSync(path.join(uploadsDir, filename), Buffer.from(await file.arrayBuffer()));
 
