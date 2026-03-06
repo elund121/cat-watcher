@@ -20,3 +20,10 @@
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
+
+/* Extra right padding for Safari's date picker icon */
+@supports (-webkit-touch-callout: none) {
+  input[type="date"] {
+    padding-right: 2.5rem;
+  }
+}

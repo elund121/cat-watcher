@@ -77,7 +77,7 @@ export default function RequestWatchModal({ households, currentUser, defaultHous
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-end sm:items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-stone-900 rounded-2xl w-full max-w-sm shadow-2xl">
+      <div className="bg-white dark:bg-stone-900 rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden">
         <div className="p-6 pb-4">
           <h2 className="text-lg font-bold text-stone-900 dark:text-stone-100 mb-1">
             {isEditing ? "Edit request" : "Request a cat sitter"}
@@ -123,7 +123,7 @@ export default function RequestWatchModal({ households, currentUser, defaultHous
                       setStartDate(e.target.value);
                       if (endDate && e.target.value > endDate) setEndDate(e.target.value);
                     }}
-                    className="w-full border border-stone-200 dark:border-stone-700 rounded-xl px-3 py-3 text-stone-900 dark:text-stone-100 bg-white dark:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    className="w-full box-border border border-stone-200 dark:border-stone-700 rounded-xl px-3 py-3 text-stone-900 dark:text-stone-100 bg-white dark:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-violet-500"
                   />
                 </div>
                 <div>
@@ -133,7 +133,7 @@ export default function RequestWatchModal({ households, currentUser, defaultHous
                     value={endDate}
                     min={startDate || today}
                     onChange={e => setEndDate(e.target.value)}
-                    className="w-full border border-stone-200 dark:border-stone-700 rounded-xl px-3 py-3 text-stone-900 dark:text-stone-100 bg-white dark:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                    className="w-full box-border border border-stone-200 dark:border-stone-700 rounded-xl px-3 py-3 text-stone-900 dark:text-stone-100 bg-white dark:bg-stone-800 focus:outline-none focus:ring-2 focus:ring-violet-500"
                   />
                 </div>
               </div>
