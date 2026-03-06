@@ -36,6 +36,11 @@ export default function CatProfileModal({ cat, canEdit, onClose, onUpdated }: Pr
   }, [cat.id]);
 
   useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  useEffect(() => {
     return () => { if (successTimerRef.current) clearTimeout(successTimerRef.current); };
   }, []);
 

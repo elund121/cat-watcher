@@ -11,6 +11,7 @@ export default function AdminPage() {
   const [newEmail, setNewEmail] = useState("");
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
+  const [inviting, setInviting] = useState<Record<string, "idle" | "sending" | "sent">>({});
 
   const isSuperuser = session?.user?.isSuperuser ?? false;
 
@@ -45,6 +46,16 @@ export default function AdminPage() {
     setNewEmail("");
     setAdding(false);
     loadEmails();
+  }
+
+  async function handleInvite(email: string) {
+    setInviting(prev => ({ ...prev, [email]: "sending" }));
+    await fetch("/api/admin/invite", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    });
+    setInviting(prev => ({ ...prev, [email]: "sent" }));
   }
 
   async function handleRemove(email: string) {
@@ -93,12 +104,21 @@ export default function AdminPage() {
               <li key={email} className="flex items-center justify-between gap-2 py-2 px-1 border-b border-stone-50 dark:border-stone-800 last:border-0">
                 <span className="text-sm text-stone-700 dark:text-stone-300 break-all">{email}</span>
                 {email !== session?.user?.email && (
-                  <button
-                    onClick={() => handleRemove(email)}
-                    className="text-xs text-red-400 hover:text-red-600 transition-colors flex-shrink-0 px-2 py-1"
-                  >
-                    Remove
-                  </button>
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <button
+                      onClick={() => handleInvite(email)}
+                      disabled={inviting[email] === "sending" || inviting[email] === "sent"}
+                      className="text-xs text-violet-500 hover:text-violet-700 transition-colors px-2 py-1 disabled:opacity-50"
+                    >
+                      {inviting[email] === "sent" ? "Sent!" : inviting[email] === "sending" ? "..." : "Invite"}
+                    </button>
+                    <button
+                      onClick={() => handleRemove(email)}
+                      className="text-xs text-red-400 hover:text-red-600 transition-colors px-2 py-1"
+                    >
+                      Remove
+                    </button>
+                  </div>
                 )}
               </li>
             ))}

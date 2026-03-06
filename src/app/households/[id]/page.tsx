@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
@@ -29,6 +29,9 @@ export default function HouseholdPage() {
   const [catNotes, setCatNotes] = useState("");
   const [addingCat, setAddingCat] = useState(false);
   const [catError, setCatError] = useState("");
+  const [catPhoto, setCatPhoto] = useState<File | null>(null);
+  const [catPhotoPreview, setCatPhotoPreview] = useState<string | null>(null);
+  const catPhotoRef = useRef<HTMLInputElement>(null);
 
   const loadData = useCallback(async () => {
     const [hRes, allRes] = await Promise.all([
@@ -68,6 +71,13 @@ export default function HouseholdPage() {
     loadData();
   }
 
+  function resetCatForm() {
+    setCatName(""); setCatEmoji("🐱"); setCatNotes(""); setCatError("");
+    setCatPhoto(null);
+    if (catPhotoPreview) { URL.revokeObjectURL(catPhotoPreview); setCatPhotoPreview(null); }
+    if (catPhotoRef.current) catPhotoRef.current.value = "";
+  }
+
   async function handleAddCat() {
     if (!catName.trim()) { setCatError("Cat name is required"); return; }
     setAddingCat(true);
@@ -77,7 +87,21 @@ export default function HouseholdPage() {
       body: JSON.stringify({ name: catName.trim(), emoji: catEmoji, notes: catNotes }),
     });
     if (res.ok) {
-      setCatName(""); setCatEmoji("🐱"); setCatNotes("");
+      const newCat = await res.json();
+      if (catPhoto) {
+        const formData = new FormData();
+        formData.append("photo", catPhoto);
+        const photoRes = await fetch(`/api/cats/${newCat.id}/photos`, { method: "POST", body: formData });
+        if (photoRes.ok) {
+          const { id: photoId } = await photoRes.json();
+          await fetch(`/api/cats/${newCat.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cover_photo_id: photoId }),
+          });
+        }
+      }
+      resetCatForm();
       setShowAddCat(false);
       loadData();
     } else {
@@ -259,10 +283,49 @@ export default function HouseholdPage() {
                   className="w-full border border-stone-200 dark:border-stone-700 rounded-xl px-4 py-3 text-stone-900 dark:text-stone-100 bg-white dark:bg-stone-800 placeholder:text-stone-400 dark:placeholder:text-stone-600 focus:outline-none focus:ring-2 focus:ring-violet-500"
                 />
               </div>
+              <div>
+                <label className="text-sm font-medium text-stone-700 dark:text-stone-300 block mb-1.5">
+                  Photo <span className="text-stone-400 font-normal">(optional)</span>
+                </label>
+                <label className="cursor-pointer block">
+                  {catPhotoPreview ? (
+                    <div className="relative w-24 h-24">
+                      <img src={catPhotoPreview} alt="Preview" className="w-24 h-24 object-cover rounded-xl border-2 border-violet-400" />
+                      <button
+                        type="button"
+                        onClick={e => { e.preventDefault(); URL.revokeObjectURL(catPhotoPreview); setCatPhotoPreview(null); setCatPhoto(null); if (catPhotoRef.current) catPhotoRef.current.value = ""; }}
+                        className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-stone-800 text-white rounded-full text-xs flex items-center justify-center hover:bg-red-500 transition-colors"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="w-24 h-24 rounded-xl border-2 border-dashed border-stone-200 dark:border-stone-700 flex flex-col items-center justify-center gap-1 text-stone-400 hover:border-violet-400 hover:text-violet-400 transition-colors">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+                      </svg>
+                      <span className="text-xs">Add photo</span>
+                    </div>
+                  )}
+                  <input
+                    ref={catPhotoRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={e => {
+                      const file = e.target.files?.[0] ?? null;
+                      if (catPhotoPreview) URL.revokeObjectURL(catPhotoPreview);
+                      setCatPhoto(file);
+                      setCatPhotoPreview(file ? URL.createObjectURL(file) : null);
+                    }}
+                  />
+                </label>
+              </div>
               {catError && <p className="text-red-500 text-sm">{catError}</p>}
               <div className="flex gap-2">
                 <button
-                  onClick={() => { setShowAddCat(false); setCatName(""); setCatEmoji("🐱"); setCatNotes(""); setCatError(""); }}
+                  onClick={() => { setShowAddCat(false); resetCatForm(); }}
                   className="flex-1 py-2.5 rounded-xl border border-stone-200 dark:border-stone-700 text-stone-600 dark:text-stone-400 text-sm font-medium"
                 >
                   Cancel
@@ -272,7 +335,7 @@ export default function HouseholdPage() {
                   disabled={addingCat}
                   className="flex-1 py-2.5 rounded-xl bg-violet-600 text-white text-sm font-semibold disabled:opacity-50"
                 >
-                  {addingCat ? "Adding..." : "Add"}
+                  {addingCat ? (catPhoto ? "Uploading…" : "Adding…") : "Add"}
                 </button>
               </div>
             </div>

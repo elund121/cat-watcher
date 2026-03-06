@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={`${inter.className} bg-stone-50 dark:bg-stone-950 transition-colors`}>
         <Providers>
-          <div className="max-w-md mx-auto min-h-screen pb-24">
+          <div className="max-w-md mx-auto min-h-dvh pb-24">
             {children}
           </div>
           <BottomNav />
